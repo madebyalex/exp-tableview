@@ -9,6 +9,30 @@ import UIKit
 
 class ViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
     
+    // Create tasks array
+    
+    let dailyTasks = [
+        Task(name: "Brush teeth and wash yourself", type: .daily, completed: false, lastCompleted: nil),
+        Task(name: "Play with my kid", type: .daily, completed: true, lastCompleted: nil),
+        Task(name: "Learn something new every day", type: .daily, completed: false, lastCompleted: nil)
+    ]
+    
+    let weeklyTasks = [
+        Task(name: "Learn web development", type: .weekly, completed: false, lastCompleted: nil),
+        Task(name: "Learn iOS development", type: .weekly, completed: false, lastCompleted: nil),
+        Task(name: "Do full-time and freelance jobs", type: .weekly, completed: false, lastCompleted: nil),
+        Task(name: "Clean the flat", type: .weekly, completed: false, lastCompleted: nil)
+    ]
+    
+    let yearlyTasks = [
+        Task(name: "Learn new technologies", type: .yearly, completed: false, lastCompleted: nil),
+        Task(name: "Visit new countries", type: .yearly, completed: false, lastCompleted: nil),
+        Task(name: "Meet new good people", type: .yearly, completed: false, lastCompleted: nil),
+        Task(name: "Learn Spanish", type: .yearly, completed: false, lastCompleted: nil),
+        Task(name: "Launch personal project(s)", type: .yearly, completed: false, lastCompleted: nil)
+    ]
+    
+    
     func numberOfSections(in tableView: UITableView) -> Int {
         tableView.backgroundColor = UIColor(red: 0.93, green: 0.93, blue: 0.93, alpha: 1.00)
         
@@ -31,32 +55,42 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
-//        let cell = UITableViewCell()
-        
         let cell = tableView.dequeueReusableCell(withIdentifier: "normalCell", for: indexPath)
+        
+        var currentTask: Task!
         
         switch indexPath.section {
         case 0:
-            cell.textLabel?.text = dailyTasks[indexPath.row]
+            currentTask = dailyTasks[indexPath.row]
             cell.imageView?.image = UIImage(named: "clock2")
         case 1:
-            cell.textLabel?.text = weeklyTasks[indexPath.row]
+            currentTask = weeklyTasks[indexPath.row]
             cell.imageView?.image = UIImage(named: "calendar")
-//            cell.accessoryType = .disclosureIndicator
             cell.detailTextLabel?.text = "Some details"
         
         case 2:
-            cell.textLabel?.text = yearlyTasks[indexPath.row]
+            currentTask = yearlyTasks[indexPath.row]
             cell.imageView?.image = UIImage(named: "globe-alt")
         default :
             cell.textLabel?.text = "This shouldn't happen ;)"
         }
         
-//        cell.detailTextLabel?.textColor = .darkGray
+        cell.textLabel?.text = currentTask.name
         cell.backgroundColor = #colorLiteral(red: 1, green: 1, blue: 1, alpha: 0.8045747264)
+        
+        
+        if currentTask.completed {
+            cell.accessoryType = .checkmark
+            cell.textLabel?.textColor = UIColor.gray
+            
+        } else {
+            cell.accessoryType = .none
+            cell.textLabel?.textColor = UIColor.black
+        }
         
         return cell
     }
+
     
     func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
         switch section {
@@ -71,26 +105,6 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         }
     }
     
-    let dailyTasks = [
-        "Brush teeth and wash yourself",
-        "Play with my kid",
-        "Learn something new every day"
-    ]
-    
-    let weeklyTasks = [
-        "Learn web development",
-        "Learn iOS development",
-        "Do full-time and freelance jobs",
-        "Clean the flat"
-    ]
-    
-    let yearlyTasks = [
-        "Learn new technologies",
-        "Visit new countries",
-        "Meet new good people",
-        "Learn Spanish",
-        "Launch personal project(s)"
-    ]
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         print("You selected row #\(indexPath.row) in section \(indexPath.section)")
@@ -115,7 +129,6 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         super.viewDidLoad()
         
     }
-
 
 }
 
