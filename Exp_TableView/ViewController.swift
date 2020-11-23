@@ -9,22 +9,53 @@ import UIKit
 
 class ViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
     
+    @IBOutlet weak var itemsTableView: UITableView!
+    
+    @IBAction func toggleDarkMode(_ sender: Any) {
+        let mySwitch = sender as! UISwitch
+        
+        if mySwitch.isOn {
+            view.backgroundColor = UIColor.darkGray
+            itemsTableView.backgroundColor = UIColor(red: 0.2, green: 0.2, blue: 0.2, alpha: 0.9)
+            
+        } else {
+            view.backgroundColor = UIColor.white
+            itemsTableView.backgroundColor = UIColor(red: 0.93, green: 0.93, blue: 0.93, alpha: 1.00)
+        }
+    }
+    
+    @IBAction func resetTasks(_ sender: Any) {
+        for i in 0..<self.dailyTasks.count {
+            self.dailyTasks[i].completed = false
+        }
+        
+        for i in 0..<self.weeklyTasks.count {
+            self.weeklyTasks[i].completed = false
+        }
+        
+        for i in 0..<yearlyTasks.count {
+            self.yearlyTasks[i].completed = false
+        }
+        
+        itemsTableView.reloadData()
+    }
+    
     // Create tasks array
     
-    let dailyTasks = [
+    var dailyTasks = [
         Task(name: "Brush teeth and wash yourself", type: .daily, completed: false, lastCompleted: nil),
-        Task(name: "Play with my kid", type: .daily, completed: true, lastCompleted: nil),
+        Task(name: "Play with my kid", type: .daily, completed: false, lastCompleted: nil),
         Task(name: "Learn something new every day", type: .daily, completed: false, lastCompleted: nil)
     ]
     
-    let weeklyTasks = [
+    var weeklyTasks = [
         Task(name: "Learn web development", type: .weekly, completed: false, lastCompleted: nil),
         Task(name: "Learn iOS development", type: .weekly, completed: false, lastCompleted: nil),
         Task(name: "Do full-time and freelance jobs", type: .weekly, completed: false, lastCompleted: nil),
         Task(name: "Clean the flat", type: .weekly, completed: false, lastCompleted: nil)
     ]
     
-    let yearlyTasks = [
+    var yearlyTasks = [
         Task(name: "Learn new technologies", type: .yearly, completed: false, lastCompleted: nil),
         Task(name: "Visit new countries", type: .yearly, completed: false, lastCompleted: nil),
         Task(name: "Meet new good people", type: .yearly, completed: false, lastCompleted: nil),
@@ -106,24 +137,37 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     }
     
     
+    // Table View Delegate Methods
+    
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         print("You selected row #\(indexPath.row) in section \(indexPath.section)")
     }
     
-    @IBOutlet weak var itemsTableView: UITableView!
-    
-    @IBAction func toggleDarkMode(_ sender: Any) {
-        let mySwitch = sender as! UISwitch
-        
-        if mySwitch.isOn {
-            view.backgroundColor = UIColor.darkGray
-            itemsTableView.backgroundColor = UIColor(red: 0.2, green: 0.2, blue: 0.2, alpha: 0.9)
+    func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
+        let completeAction = UIContextualAction(style: .normal, title: "Complete") { (action:UIContextualAction, sourceView:UIView, actionPerformed:(Bool) -> Void) in
             
-        } else {
-            view.backgroundColor = UIColor.white
-            itemsTableView.backgroundColor = UIColor(red: 0.93, green: 0.93, blue: 0.93, alpha: 1.00)
+            // Find the right object and set it to completed
+            switch indexPath.section {
+            case 0:
+                self.dailyTasks[indexPath.row].completed = !self.dailyTasks[indexPath.row].completed
+            case 1:
+                self.weeklyTasks[indexPath.row].completed = !self.weeklyTasks[indexPath.row].completed
+            case 2:
+                self.yearlyTasks[indexPath.row].completed = !self.yearlyTasks[indexPath.row].completed
+            default:
+                break
+            
+            }
+            
+            tableView.reloadData()
+            
+            actionPerformed(true)
         }
+        
+        return UISwipeActionsConfiguration(actions: [completeAction])
+
     }
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
