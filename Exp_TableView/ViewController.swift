@@ -193,8 +193,31 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     
     // Table View Delegate Methods
     
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        print("You selected row #\(indexPath.row) in section \(indexPath.section)")
+//    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+//        print("You selected row #\(indexPath.row) in section \(indexPath.section)")
+//    }
+    
+    func tableView(_ tableView: UITableView, leadingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
+        let completeActionLeading = UIContextualAction(style: .destructive, title: "Delete") { (action: UIContextualAction, sourceView: UIView, actionPerformed: (Bool) -> Void) in
+            print("Remove task")
+            
+            switch indexPath.section {
+            case 0:
+                self.dailyTasks.remove(at: indexPath.row)
+            case 1:
+                self.weeklyTasks.remove(at: indexPath.row)
+            case 2:
+                self.yearlyTasks.remove(at: indexPath.row)
+            default:
+                break
+            }
+            
+            tableView.reloadData()
+            actionPerformed(true)
+        }
+        
+        return UISwipeActionsConfiguration(actions: [completeActionLeading])
+        
     }
     
     func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
