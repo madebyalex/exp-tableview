@@ -24,20 +24,74 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         }
     }
     
+    var isClearList: Bool = true
+    
     @IBAction func resetTasks(_ sender: Any) {
-        for i in 0..<self.dailyTasks.count {
-            self.dailyTasks[i].completed = false
+        
+        let confirm = UIAlertController(title: "Reset tasks", message: "Do you want to make all of your tasks as not completed? You can't undo this.", preferredStyle: .alert)
+        
+        let yesAction = UIAlertAction(title: "Yes, reset my list", style: .destructive) { action in
+            for i in 0..<self.dailyTasks.count {
+                self.dailyTasks[i].completed = false
+            }
+            
+            for i in 0..<self.weeklyTasks.count {
+                self.weeklyTasks[i].completed = false
+            }
+            
+            for i in 0..<self.yearlyTasks.count {
+                self.yearlyTasks[i].completed = false
+            }
+            
+            self.itemsTableView.reloadData()
+        }
+
+        let noAction = UIAlertAction(title: "No", style: .cancel) {
+            action in
+            print("That was a close one!")
         }
         
-        for i in 0..<self.weeklyTasks.count {
-            self.weeklyTasks[i].completed = false
+        let nothingToClear = UIAlertController(title: "Nothing to clear", message: "Currently you haven't mark any task as done yet", preferredStyle: .alert)
+        
+        let okAction = UIAlertAction(title: "OK", style: .cancel) { action in
+            print("Nothing to clear")
+        }
+        
+        // Add actions to the alert controller
+        confirm.addAction(yesAction)
+        confirm.addAction(noAction)
+        
+        // Add an action to the alert controller if nothing to clear
+        nothingToClear.addAction(okAction)
+        
+        // Check if there is some task marked as completed
+        for i in 0..<dailyTasks.count {
+            if dailyTasks[i].completed {
+                isClearList = false
+            }
+        }
+        
+        for i in 0..<weeklyTasks.count {
+            if weeklyTasks[i].completed {
+                isClearList = false
+            }
         }
         
         for i in 0..<yearlyTasks.count {
-            self.yearlyTasks[i].completed = false
+            if yearlyTasks[i].completed {
+                isClearList = false
+            }
         }
         
-        itemsTableView.reloadData()
+        
+        // Show it
+        if !isClearList {
+            present(confirm, animated: true, completion: nil)
+        } else {
+            present(nothingToClear, animated: true, completion: nil)
+        }
+        
+        print("Is the task list is clear? --> \(isClearList)")
     }
     
     // Create tasks array
