@@ -11,6 +11,13 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     
     @IBOutlet weak var itemsTableView: UITableView!
     
+    
+    var statusBarStyle: UIStatusBarStyle = .default
+    
+    override var preferredStatusBarStyle: UIStatusBarStyle {
+        return self.statusBarStyle
+    }
+    
     @IBAction func toggleDarkMode(_ sender: Any) {
         let mySwitch = sender as! UISwitch
         
@@ -18,11 +25,16 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
             view.backgroundColor = UIColor.darkGray
             itemsTableView.backgroundColor = UIColor(red: 0.2, green: 0.2, blue: 0.2, alpha: 0.9)
             
+            self.statusBarStyle = .lightContent
+            
         } else {
             view.backgroundColor = UIColor.white
             itemsTableView.backgroundColor = UIColor(red: 0.93, green: 0.93, blue: 0.93, alpha: 1.00)
+            
+            self.statusBarStyle = .darkContent
         }
     }
+    
     
     var isClearList: Bool = true
     
@@ -237,7 +249,6 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
             }
             
             tableView.reloadData()
-            
             actionPerformed(true)
         }
         
@@ -245,11 +256,9 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
 
     }
     
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         
     }
 
 }
-
