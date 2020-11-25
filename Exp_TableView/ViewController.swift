@@ -20,19 +20,23 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     
     @IBAction func toggleDarkMode(_ sender: Any) {
         let mySwitch = sender as! UISwitch
-        
+
         if mySwitch.isOn {
+            
             view.backgroundColor = UIColor.darkGray
             itemsTableView.backgroundColor = UIColor(red: 0.2, green: 0.2, blue: 0.2, alpha: 0.9)
             
             self.statusBarStyle = .lightContent
             
         } else {
+            
             view.backgroundColor = UIColor.white
             itemsTableView.backgroundColor = UIColor(red: 0.93, green: 0.93, blue: 0.93, alpha: 1.00)
             
             self.statusBarStyle = .darkContent
         }
+        
+        setNeedsStatusBarAppearanceUpdate()
     }
     
     
@@ -103,7 +107,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
             present(nothingToClear, animated: true, completion: nil)
         }
         
-        print("Is the task list is clear? --> \(isClearList)")
+//        print("Is the task list is clear? --> \(isClearList)")
     }
     
     // Create tasks array
